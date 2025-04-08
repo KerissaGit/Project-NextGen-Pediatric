@@ -14,6 +14,8 @@ class Doctor(db.Model, SerializerMixin):
     age_of_care = db.Column(db.Integer)
 
     # Add relationship
+    appointments = db.relationship('Appointment', back_populates='doctors')
+    children = association_proxy('appointments', 'child')
 
 
     # serialize_rules = (,)
@@ -30,6 +32,9 @@ class Child(db.Model, SerializerMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'), nullable = False)
 
     # Add relationship
+    parents = db.relationship('Parent', back_populates='children')
+    appointments = db.relationship('Appointment', back_populates='children')
+    doctors = association_proxy('children', 'doctor')
 
 
     # serialize_rules = (,)
@@ -45,6 +50,8 @@ class Parent(db.Model, SerializerMixin):
     child_id = db.Column(db.Integer, db.ForeignKey('children.id'), nullable = False)
 
     # Add relationship
+    child = db.relationship('Child', back_populates='parents')
+    appointments = association_proxy('children', 'appointment')
 
 
     # serialize_rules = (,)
@@ -59,6 +66,9 @@ class Appointment(db.Model, SerializerMixin):
 
 
     # Add relationship
+    child = db.relationship('Child', back_populates='appointments')
+    doctor = db.relationship('Doctor', back_populates='appointments')
+    parents = association_proxy('children', 'parent')
 
 
     # serialize_rules = (,)
