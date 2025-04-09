@@ -1,15 +1,23 @@
+import "../index.css";
+
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 
-// import HomePage from './Homepage';
+
+import Header from './Header';
+import HomePage from './HomePage';
+import Footer from './Footer';
+
+
 
 function App() {
-  return <h1>Project Client</h1>;
+  return (
     <div className="App">
       <Header />
       <HomePage />
       <Footer />
     </div>
+  );
 }
 
 export default App;
