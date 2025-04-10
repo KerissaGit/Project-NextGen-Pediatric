@@ -9,7 +9,7 @@ function Appointments() {
     return(
         <div className="home-page">
             <DoctorContainer />
-            {/* <PatientPortal /> */}
+            <PatientPortal />
         </div>
     );
 }

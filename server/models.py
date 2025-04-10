@@ -13,11 +13,13 @@ class Doctor(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
+    specialty = db.Column(db.String)
+    education = db.Column(db.String)
+    years_experience = db.Column(db.Integer)
     # reason_visit = db.Column(db.String)
-    # specialty = db.Column(db.String)
-    # age_of_care = db.Column(db.Integer)
 
     appointments = db.relationship('Appointment', back_populates='doctor')
+    reviews = db.relationship('Review', back_populates='doctor')
     children = association_proxy('appointments', 'child')
 
     # @validates('age_of_care')
@@ -29,7 +31,7 @@ class Doctor(db.Model, SerializerMixin):
     #     else:
     #         raise ValueError(f"Age must be between {min_age} and {max_age}.")
 
-    serialize_rules = ('-appointments', '-children')
+    serialize_rules = ('-appointments', '-children', 'reviews')
         
 
 
@@ -119,7 +121,20 @@ class Appointment(db.Model, SerializerMixin):
     serialize_rules = ('-child', '-doctor')
 
 
+
 @event.listens_for(Appointment, 'before_insert')
 def validate_before_insert(mapper, connection, target):
     target.validate_time_order()
 
+
+class Review(db.Model, SerializerMixin):
+    __tablename__ = 'reviews'
+
+    id = db.Column(db.Integer, primary_key=True)
+    doctor_id = db.Column(db.Integer, db.ForeignKey(doctors.id))
+    rating = db.Column(db.Integer, nullable=False)
+    comment = db.Column(db.String)
+
+    doctor = db.relationship('Doctor', back_populates='reviews')
+
+    serialize_rules = ('-doctor.reviews',)

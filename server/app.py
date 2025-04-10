@@ -105,6 +105,22 @@ class Appointments(Resource):
             return make_response({"errors": [str(e)]}, 400)
         except Exception as e:
             return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
+        
+
+class Reviews(Resource):
+    def post(self):
+        params = request.json
+        try:
+            review = Review(
+                doctor_id = params["doctor_id"],
+                rating = params["rating"],
+                comment = params.get("comment", "")
+            )
+            db.session.add(review)
+            db.session.commit()
+            return make_response(review.to_dict(), 201)
+        except Exception as e:
+            return make_response({"errors": [str(e)]}, 400)
 
 
 api.add_resource(Parents, '/parents')
@@ -112,7 +128,7 @@ api.add_resource(Children, '/children')
 api.add_resource(ChildById, '/children/<int:id>')
 api.add_resource(Doctors, '/doctors')
 api.add_resource(Appointments, '/appointments')
-
+api.add_resource(Reviews, '/reviews')
 
 
 if __name__ == '__main__':
