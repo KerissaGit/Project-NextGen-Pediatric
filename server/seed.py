@@ -20,9 +20,7 @@ def create_doctors():
         names.append(name)
 
         doctor = Doctor(
-            name=name,
-            specialty=fake.word(),
-            age_of_care=randint(25, 50)
+            name=name
         )
         doctors.append(doctor)
 
@@ -87,3 +85,8 @@ if __name__ == '__main__':
         db.session.commit()
 
         print("Seeding complete!")
+    
+
+# reason_visit= ("Sick", "Broken Bone", "Yearly Check-up", "Physical")
+
+

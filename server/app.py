@@ -8,7 +8,7 @@ from flask_restful import Resource
 from sqlalchemy.exc import NoResultFound
 
 # Local imports
-from config import app, db, api
+from config import app, db, api, bcrypt
 # Add your model imports
 from models import Parent, Child, Doctor, Appointment
 from datetime import datetime
