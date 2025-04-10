@@ -28,8 +28,9 @@ class Doctor(db.Model, SerializerMixin):
     #         return True
     #     else:
     #         raise ValueError(f"Age must be between {min_age} and {max_age}.")
-        
 
+    serialize_rules = ('-appointments', '-children')
+        
 
 
 class Child(db.Model, SerializerMixin):

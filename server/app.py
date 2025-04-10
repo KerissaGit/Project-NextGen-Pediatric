@@ -13,12 +13,17 @@ from config import app, db, api, bcrypt
 from models import Parent, Child, Doctor, Appointment
 from datetime import datetime
 
+from flask_cors import CORS
+CORS(app)
+# Testing lines 16/17 to connect front and back end
+
 
 # Views go here!
 
 @app.route('/')
 def index():
     return '<h1>Project Server</h1>'
+
 
 class Parents(Resource):
     def get(self):
@@ -72,7 +77,7 @@ class Doctors(Resource):
     def get(self):
         doctors = db.session.execute(db.select(Doctor)).scalars().all()
         doctors_list = [doctor.to_dict() for doctor in doctors]
-        return make_response(doctors_list)
+        return make_response(jsonify(doctors_list), 200)
 
 
 class Appointments(Resource):

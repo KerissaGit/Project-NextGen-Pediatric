@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-
-import DoctorCard from "./DoctorCards";
+import DoctorCards from "./DoctorCards";
+// import { useOutletContext } from "react-router-dom";
 
 
 
@@ -9,25 +9,33 @@ function DoctorContainer(){
 
     useEffect(() => {
         // THE LOCAL HOST PAGE NEEDS TO BE UPDATED HERE
-        fetch("http://localhost:3000/doctors")
+        fetch("http://localhost:5000/doctors")
         .then((resp) => resp.json())
-        .then((allDoctors) => setDoctors(allDoctors))
-    }, [])
+        .then((data) => setDoctors(data))
+        .catch(error => console.error("Error fetching in DoctorContainer.", error))
+    }, [setDoctors])
 
     const renderDoctors = doctors.map(({id, name, reasonVisit}) => 
-        (<DoctorCard 
+        (<DoctorCards
             key={id}
             name={name}
             reasonVisit={reasonVisit}
         />))
 
     return(
-        <main>
-            <ul className='doctor-list'>
-                { renderDoctors }
-            </ul>
+        <div>
+            <h2> Doctors List </h2>
+            <ul className="doctor-list">
+                {Array.isArray(doctors) && doctors.length > 0 ? (
+                    doctors.map(({ id, name }) => (
+                    <DoctorCards key={id} name={name} />
+                    ))
+                ) : (
+                <p>Loading or no doctors available...</p>
+            )}
+             </ul>
 
-        </main>
+        </div>
     )
 }
 

@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 
 
-function Doctors({ id, name, reasonVisit}) {
+function DoctorCards({ id, name, reasonVisit}) {
+    const [viewDoctor, setViewDoctor] = useState(false);
+
+    
 
     return(
         <li className='doctor-card'>
@@ -15,4 +18,4 @@ function Doctors({ id, name, reasonVisit}) {
 }
 
 
-export default Doctors;
+export default DoctorCards;
