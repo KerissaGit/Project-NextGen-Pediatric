@@ -5,7 +5,7 @@ from datetime import datetime
 from sqlalchemy import event
 from sqlalchemy import DateTime
 
-from config import db
+from config import db, bcrypt
 
 
 class Doctor(db.Model, SerializerMixin):
@@ -13,16 +13,23 @@ class Doctor(db.Model, SerializerMixin):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
-    specialty = db.Column(db.String)
-    age_of_care = db.Column(db.Integer)
+    # reason_visit = db.Column(db.String)
+    # specialty = db.Column(db.String)
+    # age_of_care = db.Column(db.Integer)
 
-    # Add relationship
     appointments = db.relationship('Appointment', back_populates='doctor')
     children = association_proxy('appointments', 'child')
 
+    # @validates('age_of_care')
+    # def validate_age__of_care(age, min_age, max_age):
+    #     if not isinstance(age, int):
+    #         raise TypeError("Age must be an integer.")
+    #     if min_age <= age <= max_age:
+    #         return True
+    #     else:
+    #         raise ValueError(f"Age must be between {min_age} and {max_age}.")
+        
 
-    # serialize_rules = (,)
-    serialize_rules = ('-appointments', '-children')
 
 
 class Child(db.Model, SerializerMixin):
@@ -31,13 +38,11 @@ class Child(db.Model, SerializerMixin):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String)
     age = db.Column(db.Integer)
-    appointment = db.Column(db.DateTime)
-    parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'), nullable = False)
+    parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'), nullable=False)
 
-    # Add relationship
     parent = db.relationship('Parent', back_populates='children')
-    appointments = db.relationship('Appointment', back_populates='children')
-    doctors = association_proxy('children', 'doctor')
+    appointments = db.relationship('Appointment', back_populates='child')
+    doctors = association_proxy('appointments', 'doctor')
 
     @validates('name')
     def validates_name(self, key, value):
@@ -47,11 +52,10 @@ class Child(db.Model, SerializerMixin):
 
     @validates('age')
     def validates_age(self, key, value):
-        if not value or len(value) < 1 or value > 18:
-            raise ValueError('Child must have an age.')
+        if not value or value < 0 or value > 18:
+            raise ValueError('Child must have a valid age (0-18).')
         return value
 
-    # serialize_rules = (,)
     serialize_rules = ('-appointments', '-doctors')
 
 
@@ -59,47 +63,42 @@ class Parent(db.Model, SerializerMixin):
     __tablename__ = 'parents'
 
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String)
+    username = db.Column(db.String)
+    _password_hash = db.Column(db.String, nullable=False)
+    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
     email = db.Column(db.String)
-    child_id = db.Column(db.Integer, db.ForeignKey('children.id'), nullable = False)
 
-    # Add relationship
-    child = db.relationship('Child', back_populates='parent')
-    appointments = association_proxy('children', 'appointment')
+    children = db.relationship('Child', back_populates='parent')
 
+    # appointments through children
+    appointments = association_proxy('children', 'appointments')
 
-    # serialize_rules = (,)
+    @property
+    def password_hash(self):
+        return self._password_hash
+
+    @password_hash.setter
+    def password_hash(self, password):
+        self._password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+
     serialize_rules = ('-appointments',)
 
 
 class Appointment(db.Model, SerializerMixin):
-    __tablename__ = 'appointment'
+    __tablename__ = 'appointments'
 
     id = db.Column(db.Integer, primary_key=True)
     child_id = db.Column(db.Integer, db.ForeignKey('children.id'), nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'), nullable=False)
-    date= db.Column(db.DateTime, nullable=False)
+    date = db.Column(db.DateTime, nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
     end_time = db.Column(db.DateTime, nullable=False)
 
-    
-
-    # Add relationships
     child = db.relationship('Child', back_populates='appointments')
     doctor = db.relationship('Doctor', back_populates='appointments')
+    parent = association_proxy('child', 'parent')
 
-    @validates
-    def validate_datetime(self, time_str, field_name):
-        try:
-            return datetime.strptime(time_str, "%Y-%m-%d %H:%M")
-        except ValueError:
-             raise ValueError(f"Invalid date or time format for {field_name}. Use YYYY-MM-DD HH:MM.")
-
-    @validates
-    def validate_time_order(self):
-        if self.start_time >= self.end_time:
-            raise ValueError("Start time must be before end time.")
-        
     @validates('start_time')
     def validate_start_time(self, key, value):
         if value is None:
@@ -113,23 +112,13 @@ class Appointment(db.Model, SerializerMixin):
         return value
 
     def validate_time_order(self):
-        """Ensure that start time is before end time."""
         if self.start_time >= self.end_time:
             raise ValueError("Start time must be before end time.")
 
-    # Method to validate before insert/update
-    def before_insert(self):
-        self.validate_time_order()
+    serialize_rules = ('-child', '-doctor')
 
 
-# Event listener outside of the class definition
 @event.listens_for(Appointment, 'before_insert')
 def validate_before_insert(mapper, connection, target):
-    target.before_insert()
-
-# serialize_rules = (,)
-serialize_rules = ('-child', '-doctor')
-
-
-
+    target.validate_time_order()
 
