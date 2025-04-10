@@ -8,18 +8,17 @@ function DoctorContainer(){
     const [doctors, setDoctors] = useState([])
 
     useEffect(() => {
-        // THE LOCOAL HOST PAGE NEEDS TO BE UPDATED HERE
+        // THE LOCAL HOST PAGE NEEDS TO BE UPDATED HERE
         fetch("http://localhost:3000/doctors")
         .then((resp) => resp.json())
         .then((allDoctors) => setDoctors(allDoctors))
     }, [])
 
-    const renderDoctors = doctors.map(({id, name, specialty, ageOfCare}) => 
+    const renderDoctors = doctors.map(({id, name, reasonVisit}) => 
         (<DoctorCard 
             key={id}
             name={name}
-            specialty={specialty}
-            ageOfCare={ageOfCare}
+            reasonVisit={reasonVisit}
         />))
 
     return(
