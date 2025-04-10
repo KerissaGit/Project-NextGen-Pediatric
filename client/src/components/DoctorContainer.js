@@ -1,33 +1,48 @@
 import React, { useEffect, useState } from "react";
-
-import DoctorCard from "./DoctorCards";
+import DoctorCards from "./DoctorCards";
+import ReviewForm from "./ReviewForm";
 
 
 
 function DoctorContainer(){
-    const [doctors, setDoctors] = useState([])
+    const [doctors, setDoctors] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         // THE LOCAL HOST PAGE NEEDS TO BE UPDATED HERE
-        fetch("http://localhost:3000/doctors")
+        fetch("http://localhost:5000/doctors")
         .then((resp) => resp.json())
-        .then((allDoctors) => setDoctors(allDoctors))
-    }, [])
+        .then((data) => {setDoctors(data); setLoading(false);})
+        .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
+    }, [setDoctors])
 
-    const renderDoctors = doctors.map(({id, name, reasonVisit}) => 
-        (<DoctorCard 
+    const renderDoctors = doctors.map(({id, name, specialty, education, year_experience, reviews, reasonVisit}) => 
+        (<DoctorCards
             key={id}
             name={name}
-            reasonVisit={reasonVisit}
+            specialty={specialty}
+            education={education}
+            year_experience={year_experience}
+            reviews={reviews}
+            // reasonVisit={reasonVisit}
         />))
 
     return(
-        <main>
-            <ul className='doctor-list'>
-                { renderDoctors }
-            </ul>
+        <div>
+            <h2> Doctors List </h2>
+            <ul className="doctor-list">
+                {Array.isArray(doctors) && doctors.length > 0 ? (
+                    doctors.map(({ id, name }) => (
+                    <DoctorCards key={id} name={name} />
+                    ))
+                ) : (
+                <p>Loading or Doctors are currently available. 🙁</p>
+            )}
+             </ul>
+             <br />
+             <ReviewForm />
 
-        </main>
+        </div>
     )
 }
 

@@ -8,7 +8,7 @@ from faker import Faker
 
 # Local imports
 from app import app
-from models import db, Doctor, Child, Parent, Appointment  
+from models import db, Doctor, Child, Parent, Appointment, Review  
 
 def create_doctors():
     doctors = []
@@ -63,6 +63,18 @@ def create_appointments(doctors, children):
 
     return appointments
 
+def create_reviews(doctors):
+    reviews = []
+    for doc in doctors:
+        for _ in range(randint(1,3)):
+            review = Review(
+                doctor_id = doctor.id,
+                rating = randint(1,5),
+                comment = fake.sentence()
+            )
+            reviews.append(review)
+    return reviews
+
 if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
@@ -72,11 +84,13 @@ if __name__ == '__main__':
         doctors = create_doctors()
         children = create_children()
         parents = create_parents()
+        reviews = create_reviews(doctors)
 
         # Add them to the session and commit
         db.session.add_all(doctors)
         db.session.add_all(children)
         db.session.add_all(parents)
+        db.session.add_all(reviews)
         db.session.commit()
 
         # Create appointments

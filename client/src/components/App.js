@@ -6,6 +6,7 @@ import { Switch, Route } from "react-router-dom";
 
 import Header from './Header';
 import HomePage from './HomePage';
+import Appointments from './Appointments';
 import Footer from './Footer';
 
 
@@ -15,6 +16,7 @@ function App() {
     <div className="App">
       <Header />
       <HomePage />
+      <Appointments />
       <Footer />
     </div>
   );

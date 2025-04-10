@@ -7,7 +7,10 @@ function Appointments() {
 
 
     return(
-        <main> Appointments Page </main>
+        <div className="home-page">
+            <DoctorContainer />
+            <PatientPortal />
+        </div>
     );
 }
 
