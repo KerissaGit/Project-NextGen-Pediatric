@@ -10,12 +10,12 @@ from sqlalchemy.exc import NoResultFound
 # Local imports
 from config import app, db, api, bcrypt
 # Add your model imports
-from models import Parent, Child, Doctor, Appointment
+from models import Parent, Child, Doctor, Appointment, Reviews 
 from datetime import datetime
 
 from flask_cors import CORS
 CORS(app)
-# Testing lines 16/17 to connect front and back end
+
 
 
 # Views go here!

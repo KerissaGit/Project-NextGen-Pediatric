@@ -13,7 +13,7 @@ from models import db, Doctor, Child, Parent, Appointment, Review
 def create_doctors():
     doctors = []
     names = []
-    for _ in range(8):
+    for _ in range(10):
         name = fake.name()
         while name in names:
             name = fake.name()
@@ -26,29 +26,33 @@ def create_doctors():
 
     return doctors
 
-def create_children():
-    children = []
-    for _ in range(10):
-        child = Child(
-            name=fake.first_name(),
-            age=randint(1, 18),
-            appointment=fake.date_this_year(),
-            parent_id=randint(1, 5)
-        )
-        children.append(child)
-
-    return children
 
 def create_parents():
     parents = []
     for _ in range(5):
         parent = Parent(
-            name=fake.name(),
+            username=fake.user_name(),
             email=fake.email()
         )
         parents.append(parent)
 
     return parents
+
+def create_children():
+    children = []
+    for _ in range(10):
+        parent = rc(parents) #Testing start here till...
+        child = Child(
+            name=fake.first_name(),
+            age=randint(1, 18),
+            # appointments=fake.date_this_year(),
+            # parent_id=randint(1, 5)
+            parent_id=parent.id #Testing this to fix errors i've encountered
+        )
+        children.append(child)
+
+    return children
+
 
 def create_appointments(doctors, children):
     appointments = []
@@ -65,7 +69,7 @@ def create_appointments(doctors, children):
 
 def create_reviews(doctors):
     reviews = []
-    for doc in doctors:
+    for doctor in doctors:
         for _ in range(randint(1,3)):
             review = Review(
                 doctor_id = doctor.id,
@@ -82,14 +86,14 @@ if __name__ == '__main__':
 
         # Create doctors, children, and parents
         doctors = create_doctors()
-        children = create_children()
         parents = create_parents()
+        children = create_children()
         reviews = create_reviews(doctors)
 
         # Add them to the session and commit
         db.session.add_all(doctors)
-        db.session.add_all(children)
         db.session.add_all(parents)
+        db.session.add_all(children)
         db.session.add_all(reviews)
         db.session.commit()
 

@@ -6,12 +6,12 @@ import Auth from "./Auth";
 
 
 function PatientPortal(){
-    const [loggedInPArent, setLoggedInPArent] = useState(null)
+    const [loggedInParent, setLoggedInParent] = useState(null)
 
     return <div>{
-        !!loggedInPArent ?
+        !!loggedInParent ?
         <Outlet/> :
-        <Auth setParent={setLoggedInPArent}/>       
+        <Auth setParent={setLoggedInParent}/>       
         }
           </div>
 }

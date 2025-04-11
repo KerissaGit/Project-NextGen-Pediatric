@@ -131,7 +131,7 @@ class Review(db.Model, SerializerMixin):
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True)
-    doctor_id = db.Column(db.Integer, db.ForeignKey(doctors.id))
+    doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'))
     rating = db.Column(db.Integer, nullable=False)
     comment = db.Column(db.String)
 

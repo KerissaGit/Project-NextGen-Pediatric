@@ -9,7 +9,6 @@ function DoctorContainer(){
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // THE LOCAL HOST PAGE NEEDS TO BE UPDATED HERE
         fetch("http://localhost:5000/doctors")
         .then((resp) => resp.json())
         .then((data) => {setDoctors(data); setLoading(false);})
@@ -27,23 +26,32 @@ function DoctorContainer(){
             // reasonVisit={reasonVisit}
         />))
 
-    return(
-        <div>
-            <h2> Doctors List </h2>
-            <ul className="doctor-list">
-                {Array.isArray(doctors) && doctors.length > 0 ? (
-                    doctors.map(({ id, name }) => (
-                    <DoctorCards key={id} name={name} />
-                    ))
-                ) : (
-                <p>Loading or Doctors are currently available. 🙁</p>
-            )}
-             </ul>
-             <br />
-             <ReviewForm />
 
-        </div>
-    )
+return (
+    <div>
+      <h2>Doctors List</h2>
+      {loading ? (
+        <p>Loading doctors...</p>
+      ) : doctors.length > 0 ? (
+        <ul className="doctor-list">
+          {doctors.map((doc) => (
+            <DoctorCards
+              key={doc.id}
+              name={doc.name}
+              specialty={doc.specialty}
+              education={doc.education}
+              year_experience={doc.years_experience}
+              reviews={doc.reviews}
+            />
+          ))}
+        </ul>
+      ) : (
+        <p>No doctors currently available. 🙁</p>
+      )}
+      <br />
+      <ReviewForm />
+    </div>
+  );
 }
 
 export default DoctorContainer;

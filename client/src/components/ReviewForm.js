@@ -51,7 +51,7 @@ function ReviewForm() {
                     </option>)}
             </select>
             <br />
-            <lable>Rate your Doctor (1-5):</lable>
+            <label>Rate your Doctor (1-5):</label>
             <input type="number" name="rating" min="1" max="5" value={formData.rating} onChange={handleChange} required />
             <br />
             <button type="submit">Submit Review</button>
