@@ -10,7 +10,7 @@ from sqlalchemy.exc import NoResultFound
 # Local imports
 from config import app, db, api, bcrypt
 # Add your model imports
-from models import Parent, Child, Doctor, Appointment, Reviews 
+from models import Parent, Child, Doctor, Appointment, Review
 from datetime import datetime
 
 from flask_cors import CORS

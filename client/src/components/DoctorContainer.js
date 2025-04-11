@@ -15,16 +15,16 @@ function DoctorContainer(){
         .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
     }, [setDoctors])
 
-    const renderDoctors = doctors.map(({id, name, specialty, education, year_experience, reviews, reasonVisit}) => 
-        (<DoctorCards
-            key={id}
-            name={name}
-            specialty={specialty}
-            education={education}
-            year_experience={year_experience}
-            reviews={reviews}
-            // reasonVisit={reasonVisit}
-        />))
+    // const renderDoctors = doctors.map(({id, name, specialty, education, year_experience, reviews, reasonVisit}) => 
+    //     (<DoctorCards
+    //         key={id}
+    //         name={name}
+    //         specialty={specialty}
+    //         education={education}
+    //         year_experience={year_experience}
+    //         reviews={reviews}
+    //         // reasonVisit={reasonVisit}
+    //     />))
 
 
 return (

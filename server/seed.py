@@ -5,10 +5,11 @@ from random import randint, choice as rc
 
 # Remote library imports
 from faker import Faker
+from datetime import timedelta
 
 # Local imports
 from app import app
-from models import db, Doctor, Child, Parent, Appointment, Review  
+from models import db, Doctor, Child, Parent, Appointment, Review
 
 def create_doctors():
     doctors = []
@@ -34,6 +35,7 @@ def create_parents():
             username=fake.user_name(),
             email=fake.email()
         )
+        parent.password_hash = "password123"
         parents.append(parent)
 
     return parents
@@ -57,11 +59,16 @@ def create_children():
 def create_appointments(doctors, children):
     appointments = []
     for _ in range(15):
+        date = fake.date_time_this_year()
+        start_time = date
+        end_time = start_time + timedelta(hours=1)
+
         appointment = Appointment(
             child_id=randint(1, len(children)),
             doctor_id=randint(1, len(doctors)),
-            start_time=fake.date_this_year(),
-            end_time=fake.date_this_year()
+            date=start_time.date(),
+            start_time=start_time,
+            end_time=end_time
         )
         appointments.append(appointment)
 
@@ -86,16 +93,22 @@ if __name__ == '__main__':
 
         # Create doctors, children, and parents
         doctors = create_doctors()
-        parents = create_parents()
-        children = create_children()
-        reviews = create_reviews(doctors)
-
-        # Add them to the session and commit
         db.session.add_all(doctors)
+        db.session.commit() 
+
+        parents = create_parents()
         db.session.add_all(parents)
+        db.session.commit()
+
+        children = create_children()
         db.session.add_all(children)
+        db.session.commit()
+
+        reviews = create_reviews(doctors)
         db.session.add_all(reviews)
         db.session.commit()
+
+        # Add them to the session and commit
 
         # Create appointments
         appointments = create_appointments(doctors, children)
