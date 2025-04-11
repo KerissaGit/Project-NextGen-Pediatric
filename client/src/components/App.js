@@ -1,7 +1,7 @@
 import "../index.css";
-
-import React, { useEffect, useState } from "react";
-import { Switch, Route, Outlet } from "react-router-dom";
+import React from "react";
+// import React, { useEffect, useState } from "react";
+// import { Switch, Route, Outlet } from "react-router-dom";
 
 
 import Header from './Header';

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import PatientCards from "./PatientCards";
-import NewApptForm from "./NewApptForm";
-import Auth from "./components/Auth.js"
+// import PatientCards from "./PatientCards";
+// import NewApptForm from "./NewApptForm";
 import { Outlet } from 'react-router-dom'
+import Auth from "./Auth";
 
 
 function PatientPortal(){
