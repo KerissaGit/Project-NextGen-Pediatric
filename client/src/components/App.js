@@ -1,13 +1,17 @@
+import "../index.css";
 import React from "react";
+// import React, { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
+
+
 import Header from './Header';
+// import HomePage from './HomePage';
+// import Appointments from './Appointments';
 import Footer from './Footer';
 
-function App() {
-  console.log("Header:", Header);
-  console.log("Footer:", Footer);
-  console.log("Outlet:", Outlet);
 
+
+function App() {
   return (
     <div className="App">
       <Header />
