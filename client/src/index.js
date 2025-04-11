@@ -1,11 +1,16 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import { RouterProvider } from "react-router-dom";
-import router from "./router";
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { RouterProvider } from 'react-router-dom'; // ✅ import this
+import router from './router'; // ✅ your router.js file
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const theme = createTheme();
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={theme}>
+      <RouterProvider router={router} /> {/* ✅ this replaces BrowserRouter + App */}
+    </ThemeProvider>
   </React.StrictMode>
 );
