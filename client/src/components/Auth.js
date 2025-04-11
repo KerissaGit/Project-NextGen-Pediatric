@@ -94,3 +94,5 @@ function Auth({ setParent }) {
     )
 
 }
+
+export default Auth
