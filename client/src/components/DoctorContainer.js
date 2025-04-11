@@ -26,24 +26,7 @@ function DoctorContainer(){
             // reasonVisit={reasonVisit}
         />))
 
-//     return(
-//         <div>
-//             <h2> Doctors List </h2>
-//             <ul className="doctor-list">
-//                 {loading ? (
-//                     <p>Loading doctors...</p>
-//                 ) : doctors.length > 0 ? (
-//                     renderDoctors
-//                 ) : (
-//                 <p>Loading or Doctors are currently available. 🙁</p>
-//                 )}
-//              </ul>
-//              <br />
-//              <ReviewForm />
 
-//         </div>
-//     )
-// }
 return (
     <div>
       <h2>Doctors List</h2>

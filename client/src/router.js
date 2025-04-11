@@ -10,7 +10,7 @@ import Appointments from "./components/Appointments";
 const router = createBrowserRouter([
     {
       path: '/',
-      element: <App />,  // layout component
+      element: <App />, 
       children: [
         { index: true, element: <HomePage /> },
         { path: 'appointments', element: <Appointments /> },
