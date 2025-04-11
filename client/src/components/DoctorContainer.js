@@ -31,13 +31,13 @@ function DoctorContainer(){
         <div>
             <h2> Doctors List </h2>
             <ul className="doctor-list">
-                {Array.isArray(doctors) && doctors.length > 0 ? (
-                    doctors.map(({ id, name }) => (
-                    <DoctorCards key={id} name={name} />
-                    ))
+                {loading ? (
+                    <p>Loading doctors...</p>
+                ) : doctors.length > 0 ? (
+                    renderDoctors
                 ) : (
                 <p>Loading or Doctors are currently available. 🙁</p>
-            )}
+                )}
              </ul>
              <br />
              <ReviewForm />

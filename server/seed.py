@@ -65,7 +65,7 @@ def create_appointments(doctors, children):
 
 def create_reviews(doctors):
     reviews = []
-    for doc in doctors:
+    for doctor in doctors:
         for _ in range(randint(1,3)):
             review = Review(
                 doctor_id = doctor.id,
