@@ -54,40 +54,50 @@ function Auth({ setParent }) {
             validationSchema= {signup ? signupSchema : loginSchema}
             onSubmit={handleSubmit}
             >
-                {({handleSubmit, values, handleChange}) => (
-                    <form className='form' onSubmit={handleSubmit}>
-                    <label htmlFor='username'>Username:</label>
-                    <input
-                        id="username"
-                        name="username"
-                        placeholder="username"
-                        required
-                        value={values.username}
-                        onChange={handleChange}
-                    />
-                    <label htmlFor='password'>Password:</label>
-                    <input
-                        id="username"
-                        name="username"
-                        placeholder="username"
-                        required
-                        value={values.username}
-                        onChange={handleChange}
-                    />
-                    {signup && <>
-                    <label htmlFor='passwordConfirmation'>Password Confirmation:</label>
-                    <input
-                        id="passwordConfirmation"
-                        name="passwordConfirmation"
-                        type="password"
-                        placeholder="Password Confirmation"
-                        value={values.passwordConfirmation}
-                        onChange={handleChange}
-                    />
-                    </> }
-                    <button type='submit' >Submit</button>
-                    </form>
+                {({ handleSubmit, values, handleChange, errors, touched }) => (
+            <form className='form' onSubmit={handleSubmit}>
+                <label htmlFor='username'>Username:</label>
+                <input
+                    id="username"
+                    name="username"
+                    placeholder="username"
+                    required
+                    value={values.username}
+                    onChange={handleChange}
+                />
+                {errors.username && touched.username && <div className="error">{errors.username}</div>}
+
+                <label htmlFor='password'>Password:</label>
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    placeholder="password"
+                    required
+                    value={values.password}
+                    onChange={handleChange}
+                />
+                {errors.password && touched.password && <div className="error">{errors.password}</div>}
+
+                {/* Password Confirmation only for signup */}
+                {signup && <>
+                <label htmlFor='passwordConfirmation'>Password Confirmation:</label>
+                <input
+                    id="passwordConfirmation"
+                    name="passwordConfirmation"
+                    type="password"
+                    placeholder="Password Confirmation"
+                    value={values.passwordConfirmation}
+                    onChange={handleChange}
+                />
+                {errors.passwordConfirmation && touched.passwordConfirmation && (
+                    <div className="error">{errors.passwordConfirmation}</div>
                 )}
+                </> }
+
+    <button type='submit'>Submit</button>
+  </form>
+)}
             </Formik>
             
         </Container>
