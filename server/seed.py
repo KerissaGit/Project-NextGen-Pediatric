@@ -27,6 +27,8 @@ def create_doctors():
 
     return doctors
 
+# Create Hard coded doctors and comment out code about
+
 
 def create_parents():
     parents = []
