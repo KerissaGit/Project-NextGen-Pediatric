@@ -31,6 +31,7 @@ function PatientPortal() {
       credentials: 'include',
     }).then(() => {
       setParent(null);
+      window.location.reload(); // Refresh the page after logout
     });
   };
 
