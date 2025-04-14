@@ -11,23 +11,52 @@ from datetime import timedelta
 from app import app
 from models import db, Doctor, Child, Parent, Appointment, Review
 
-def create_doctors():
-    doctors = []
-    names = []
-    for _ in range(10):
-        name = fake.name()
-        while name in names:
-            name = fake.name()
-        names.append(name)
+# def create_doctors():
+#     doctors = []
+#     names = []
+#     for _ in range(10):
+#         name = fake.name()
+#         while name in names:
+#             name = fake.name()
+#         names.append(name)
 
-        doctor = Doctor(
-            name=name
-        )
-        doctors.append(doctor)
+#         doctor = Doctor(
+#             name=name
+#         )
+#         doctors.append(doctor)
 
-    return doctors
+#     return doctors
 
 # Create Hard coded doctors and comment out code about
+def create_doctors():
+    doctors = [
+        Doctor(
+            name="Dr. Needle",
+            specialty="Illness",
+            education="Harvard Medical School",
+            years_experience=12
+        ),
+        Doctor(
+            name="Dr. Bones",
+            specialty="Broken Bones",
+            education="Johns Hopkins University",
+            years_experience=15
+        ),
+        Doctor(
+            name="Dr. White",
+            specialty="Yearly Check-up",
+            education="Stanford University",
+            years_experience=10
+        ),
+        Doctor(
+            name="Dr. Payne",
+            specialty="Physical",
+            education="University of California, San Francisco",
+            years_experience=8
+        )
+    ]
+    return doctors
+
 
 
 def create_parents():
