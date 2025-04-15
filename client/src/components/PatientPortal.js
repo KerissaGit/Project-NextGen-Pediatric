@@ -52,6 +52,9 @@ function PatientPortal() {
           </Typography>
           <Typography variant="body1" sx={{ mb: 2 }}>
             Manage appointments, update your info, and more.
+            {/* # import Appointments */}
+            {/* <Appointments/>
+            <NewApptForm/> */}
           </Typography>
           <Button variant="outlined" color="secondary" onClick={handleLogout}>
             Logout

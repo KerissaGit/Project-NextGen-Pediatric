@@ -12,6 +12,7 @@ import * as yup from 'yup';
 function Auth({ setParent }) {
   const [signup, setSignUp] = useState(true);
 
+  // validation schema using yup
   const signupSchema = yup.object().shape({
     username: yup.string().min(5).max(15).required('Username is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -114,7 +115,7 @@ function Auth({ setParent }) {
       <Button variant="text" onClick={toggleFormMode} sx={{ mb: 2 }}>
         {signup ? 'Already have an account? Login' : 'Need an account? Register'}
       </Button>
-
+{/* dynamically rendering inputs */}
       <Formik
         enableReinitialize
         initialValues={signup ? initialSignupValues : initialLoginValues}
@@ -185,9 +186,10 @@ function Auth({ setParent }) {
                             fullWidth
                             value={child.name}
                             onChange={handleChange}
+                            // validation error message under the input if it exists.
                             error={
                               touched.children?.[index]?.name &&
-                              Boolean(errors.children?.[index]?.name)
+                              Boolean(errors.children?.[index]?.name)  
                             }
                             helperText={
                               touched.children?.[index]?.name &&
@@ -202,6 +204,7 @@ function Auth({ setParent }) {
                             fullWidth
                             value={child.age}
                             onChange={handleChange}
+                            // validation error message under the input if it exists.
                             error={
                               touched.children?.[index]?.age &&
                               Boolean(errors.children?.[index]?.age)
@@ -211,7 +214,7 @@ function Auth({ setParent }) {
                               errors.children?.[index]?.age
                             }
                           />
-
+                          {/* Can remove a child is needed */}
                           {values.children.length > 1 && (
                             <Button
                               onClick={() => remove(index)}
