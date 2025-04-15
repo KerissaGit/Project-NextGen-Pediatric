@@ -1,9 +1,6 @@
-import React, { useState, useEffect } from "react";
-import { useOutletContext } from "react-router-dom";
+import React, { useState } from "react";
 
-function NewApptForm() {
-  const { parents, doctors, setAppointments } = useOutletContext();
-
+function NewApptForm({ parent, doctors, setAppointments }) {
   const [formData, setFormData] = useState({
     child_id: "",
     doctor_id: "",
@@ -53,33 +50,45 @@ function NewApptForm() {
     <form onSubmit={handleSubmit}>
       <h3>Create a New Appointment</h3>
 
-      <select name="child_id" value={formData.child_id} onChange={handleChange}>
-        <option value="">Select Patient</option>
-        {parents.map(child => (
-          <option key={child.id} value={child.id}>{child.name}</option>
-        ))}
-      </select>
+      <label>
+        Select Patient:
+        <select name="child_id" value={formData.child_id} onChange={handleChange}>
+          <option value="">-- Select Child --</option>
+          {parent.children?.map(child => (
+            <option key={child.id} value={child.id}>{child.name}</option>
+          ))}
+        </select>
+      </label>
 
-      <select name="doctor_id" value={formData.doctor_id} onChange={handleChange}>
-        <option value="">Select Doctor</option>
-        {doctors.map(doc => (
-          <option key={doc.id} value={doc.id}>{doc.name}</option>
-        ))}
-      </select>
+      <label>
+        Select Doctor:
+        <select name="doctor_id" value={formData.doctor_id} onChange={handleChange}>
+          <option value="">-- Select Doctor --</option>
+          {doctors.map(doc => (
+            <option key={doc.id} value={doc.id}>{doc.name}</option>
+          ))}
+        </select>
+      </label>
 
-      <input
-        type="datetime-local"
-        name="start_time"
-        value={formData.start_time}
-        onChange={handleChange}
-      />
+      <label>
+        Start Time:
+        <input
+          type="datetime-local"
+          name="start_time"
+          value={formData.start_time}
+          onChange={handleChange}
+        />
+      </label>
 
-      <input
-        type="datetime-local"
-        name="end_time"
-        value={formData.end_time}
-        onChange={handleChange}
-      />
+      <label>
+        End Time:
+        <input
+          type="datetime-local"
+          name="end_time"
+          value={formData.end_time}
+          onChange={handleChange}
+        />
+      </label>
 
       <button type="submit">Book Appointment</button>
     </form>
