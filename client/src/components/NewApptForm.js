@@ -50,39 +50,41 @@ function NewApptForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h3>Create a New Appointment</h3>
+    <div className="main-container">
+        <form className="new-appt-form" onSubmit={handleSubmit}>
+        <h3>Create a New Appointment</h3>
 
-      <select name="child_id" value={formData.child_id} onChange={handleChange}>
-        <option value="">Select Patient</option>
-        {parents.map(child => (
-          <option key={child.id} value={child.id}>{child.name}</option>
-        ))}
-      </select>
+        <select name="child_id" value={formData.child_id} onChange={handleChange}>
+            <option value="">Select Patient</option>
+            {parents.map(child => (
+            <option key={child.id} value={child.id}>{child.name}</option>
+            ))}
+        </select>
 
-      <select name="doctor_id" value={formData.doctor_id} onChange={handleChange}>
-        <option value="">Select Doctor</option>
-        {doctors.map(doc => (
-          <option key={doc.id} value={doc.id}>{doc.name}</option>
-        ))}
-      </select>
+        <select name="doctor_id" value={formData.doctor_id} onChange={handleChange}>
+            <option value="">Select Doctor</option>
+            {doctors.map(doc => (
+            <option key={doc.id} value={doc.id}>{doc.name}</option>
+            ))}
+        </select>
 
-      <input
-        type="datetime-local"
-        name="start_time"
-        value={formData.start_time}
-        onChange={handleChange}
-      />
+        <input
+            type="datetime-local"
+            name="start_time"
+            value={formData.start_time}
+            onChange={handleChange}
+        />
 
-      <input
-        type="datetime-local"
-        name="end_time"
-        value={formData.end_time}
-        onChange={handleChange}
-      />
+        <input
+            type="datetime-local"
+            name="end_time"
+            value={formData.end_time}
+            onChange={handleChange}
+        />
 
-      <button type="submit">Book Appointment</button>
-    </form>
+        <button type="submit">Book Appointment</button>
+        </form>
+    </div>
   );
 }
 

@@ -20,6 +20,15 @@ body {
   font-size: 16px;
 }
 
+/* Layout Centering for Consistency */
+.main-container {
+  /* display: flex;
+  flex-direction: column; */
+  align-items: center;
+  text-align: center;
+  padding: 40px 20px;
+}
+
 /* Header Styles */
 header {
   background-color: #1D98D0; /* Picton Blue */
@@ -43,10 +52,17 @@ header nav a {
   text-decoration: none;
   margin: 0 15px;
   font-size: 1.1rem;
+  font-weight: bold;
+  transition: color 0.3s ease, border-color 0.3s ease;
 }
 
 header nav a:hover {
   color: #FFCB77; /* Peach Yellow on hover */
+}
+
+header nav a.active {
+  border-bottom: 2px solid #FFCB77; 
+  color: #FFCB77;
 }
 
 /* Footer Styles */
@@ -192,4 +208,94 @@ footer p {
 
 .review-form button:hover {
   background-color: #4B5E6D; /* Regent St Blue */
+}
+
+/* New Appointment Form Styles */
+.new-appt-form {
+  background-color: #FFCB77; /* Peach Yellow */
+  padding: 30px 25px;
+  border-radius: 10px;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin: 20px auto;
+}
+
+.new-appt-form h2 {
+  color: #1D98D0; /* Picton Blue */
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.new-appt-form label {
+  font-weight: bold;
+  margin-top: 10px;
+  display: block;
+  color: #4B5E6D; /* Regent St Blue */
+}
+
+.new-appt-form input,
+.new-appt-form select,
+.new-appt-form textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 8px;
+  margin-bottom: 20px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.new-appt-form button {
+  background-color: #F4A300; /* Saffron */
+  color: white;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.new-appt-form button:hover {
+  background-color: #F1A94E; /* Rajah */
+}
+
+/* Appointments Page Styles */
+.appointments {
+  padding: 40px 20px;
+  background-color: #f8f8f8;
+  text-align: center;
+}
+
+.appointments h2 {
+  color: #1D98D0; /* Picton Blue */
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.appointment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.appointment-card {
+  background-color: #ffffff;
+  padding: 20px;
+  border-radius: 8px;
+  border-left: 6px solid #F1A94E; /* Rajah Accent */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.appointment-card h3 {
+  margin-bottom: 8px;
+  color: #1D98D0;
+}
+
+.appointment-card p {
+  color: #4B5E6D;
+  margin: 4px 0;
 }
