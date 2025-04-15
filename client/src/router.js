@@ -22,3 +22,28 @@ const router = createBrowserRouter([
 
 
 export default router;
+
+
+// This was the router code I had changed to attempt to get the appointments to work.
+// Saving here incase it is what is needed.
+// 
+// const router = createBrowserRouter([
+//   {
+//     path: '/',
+//     element: <App />,
+//     children: [
+//       { index: true, element: <HomePage /> },
+//       {
+//         path: 'appointments',
+//         element: <Appointments />,
+//         children: [
+//           { path: 'new', element: <NewApptForm /> } 
+//         ]
+//       },
+//       { path: 'doctors', element: <DoctorContainer /> },
+//       { path: 'portal', element: <PatientPortal /> },
+//     ],
+//   }
+// ]);
+
+// export default router;
