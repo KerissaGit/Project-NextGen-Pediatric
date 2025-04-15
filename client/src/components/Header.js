@@ -1,6 +1,6 @@
 import React from "react";
-// import { NavLink } from "react-router-dom";
-// import "./Header.css";
+import { NavLink } from "react-router-dom";
+
 
 function Header() {
     return(
@@ -8,14 +8,14 @@ function Header() {
             <h1>
                 NextGen Pediatrics
             </h1>
-            <div>
+            {/* <div> */}
                 {/* Navlinks go here */}
-                <h2>Home Page</h2>
+                {/* <h2>Home Page</h2> */}
                 {/* Navlinks go here */}
-                <h2>Patient Portal</h2>
+                {/* <h2>Patient Portal</h2> */}
                 {/* Navlinks go here */}
-                <h2>Doctors</h2>
-            </div>
+                {/* <h2>Doctors</h2>
+            </div> */}
             {/* <nav className="nav-links">
                 <NavLink to="/" className="nav-link">
                 Home Page
