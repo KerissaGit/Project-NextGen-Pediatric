@@ -10,7 +10,7 @@ function ReviewForm() {
     });
 
     useEffect(() => {
-        fetch("http://localhost:5000/doctors")
+        fetch("http://localhost:5555/doctors")
         .then((resp) => resp.json())
         .then(setDoctors)
         .catch((error) => console.error("Error loading Doctors review form.", error));
@@ -23,7 +23,7 @@ function ReviewForm() {
 
     function handleSubmit(e) {
         e.preventDefault();
-        fetch("http://localhost:5000/reviews", {
+        fetch("http://localhost:5555/reviews", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(formData),

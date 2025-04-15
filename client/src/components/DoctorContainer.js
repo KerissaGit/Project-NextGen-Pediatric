@@ -9,7 +9,7 @@ function DoctorContainer(){
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:5555/doctors")
+      fetch("http://localhost:5555/doctors")
         .then((resp) => resp.json())
         .then((data) => {setDoctors(data); setLoading(false);})
         .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
