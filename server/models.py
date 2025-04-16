@@ -92,7 +92,7 @@ class Appointment(db.Model, SerializerMixin):
     child_id = db.Column(db.Integer, db.ForeignKey('children.id'), nullable=False)
     doctor_id = db.Column(db.Integer, db.ForeignKey('doctors.id'), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False) 
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -117,7 +117,7 @@ class Appointment(db.Model, SerializerMixin):
         if self.start_time >= self.end_time:
             raise ValueError("Start time must be before end time.")
 
-    serialize_rules = ('-child', '-doctor')
+serialize_rules = ('-child.appointments', '-doctor.appointments')
 
 
 @event.listens_for(Appointment, 'before_insert')
