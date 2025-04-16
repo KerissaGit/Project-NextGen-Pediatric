@@ -5,8 +5,8 @@ function Header() {
     return (
         <header className='header'>
             <h1>NextGen Pediatrics</h1>
-            <nav className="header nav">
-                <ul className="header nav">
+            <nav className="nav">
+                <ul className="nav-links">
                     <li>
                         <NavLink 
                             to="/" 

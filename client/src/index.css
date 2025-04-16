@@ -77,10 +77,29 @@ footer p {
   font-size: 1rem;
 }
 
-/* Home Page Styles */
+Home Page Styles
 .home-page {
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  );
   padding: 40px 20px;
   text-align: center;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
+}
+.home-page {
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  ); /* Soft gradient */
+  padding: 40px 20px;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh;
 }
 
 .home-page h2 {
@@ -92,7 +111,32 @@ footer p {
 .home-page p {
   font-size: 1.2rem;
   margin-bottom: 20px;
+  text-align:justify;
 }
+
+.home-content {
+  background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent white */
+  padding: 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+}
+
+.home-content h2 {
+  color: #1D98D0; /* Picton Blue */
+  font-size: 2.2rem;
+  margin-bottom: 20px;
+}
+
+.home-content p {
+  font-size: 1.15rem;
+  color: #4B5E6D; /* Calm dark blue-grey */
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+
 
 /* Patient Portal Page */
 .patient-portal {
@@ -298,4 +342,62 @@ footer p {
 .appointment-card p {
   color: #4B5E6D;
   margin: 4px 0;
+}
+
+/* Auth Page Styles */
+.auth-form {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.auth-input input {
+  background-color: #f0f0f0;
+}
+
+.auth-button {
+  background-color: #1D98D0;
+  color: white;
+}
+
+.auth-button:hover {
+  background-color: #4B5E6D;
+}
+
+
+/* NavLinks Styles */
+/* Navigation wrapper */
+.nav {
+  margin-top: 10px;
+}
+
+/* Flex row for nav links */
+.nav-links {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
+}
+
+/* Each NavLink */
+.nav-links li a {
+  color: white;
+  text-decoration: none;
+  font-size: 1.1rem;
+  font-weight: bold;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Hover effect */
+.nav-links li a:hover {
+  color: #FFCB77;
+}
+
+/* Active link */
+.nav-links li a.active {
+  border-bottom: 2px solid #FFCB77;
+  color: #FFCB77;
 }

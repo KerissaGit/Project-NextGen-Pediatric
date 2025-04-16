@@ -100,7 +100,7 @@ function PatientPortal() {
   }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4 }}>
+    <Container maxWidth="md" sx={{ mt: 4 }} className="patient-portal">
       {parent ? (
         <Box>
           <Typography variant="h5" gutterBottom>
@@ -116,7 +116,7 @@ function PatientPortal() {
             setAppointments={setAppointments}
           />
 
-          <Box sx={{ mt: 4 }}>
+          <Box className="appointment-list" sx={{ mt: 4 }}>
             <Typography variant="h6">Your Appointments:</Typography>
             {appointments.length > 0 ? (
               appointments.map(appt => (

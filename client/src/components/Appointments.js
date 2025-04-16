@@ -25,7 +25,7 @@ function Appointments() {
       
 
   return (
-    <div className="home-page">
+    <div className="appointments">
       <DoctorContainer />
       <PatientPortal />
       <Outlet context={{ parents, doctors, appointments }} />

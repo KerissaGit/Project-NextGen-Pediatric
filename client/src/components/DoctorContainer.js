@@ -28,7 +28,7 @@ function DoctorContainer(){
 
 
 return (
-    <div>
+    <div className="main-container doctor-page">
       <h2>Doctors List</h2>
       {loading ? (
         <p>Loading doctors...</p>
