@@ -27,6 +27,7 @@ body {
   align-items: center;
   text-align: center;
   padding: 40px 20px;
+  border-radius: 8px;
 }
 
 /* Header Styles */
@@ -36,6 +37,7 @@ header {
   text-align: center;
   color: white;
   font-size: 2rem;
+  border-radius: 8px;
 }
 
 header h1 {
@@ -71,6 +73,7 @@ footer {
   color: white;
   padding: 20px;
   text-align: center;
+  border-radius: 8px;
 }
 
 footer p {
@@ -89,6 +92,7 @@ Home Page Styles
   justify-content: center;
   align-items: center;
   min-height: 80vh;
+  border-radius: 8px;
 }
 .home-page {
   background: linear-gradient(
@@ -100,6 +104,7 @@ Home Page Styles
   justify-content: center;
   align-items: center;
   min-height: 80vh;
+  border-radius: 8px;
 }
 
 .home-page h2 {
@@ -141,8 +146,14 @@ Home Page Styles
 /* Patient Portal Page */
 .patient-portal {
   background-color: #FFCB77; /* Peach Yellow */
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  );
   padding: 40px 20px;
   border-radius: 8px;
+  margin-bottom: 20px;
 }
 
 .patient-portal h2 {
@@ -181,6 +192,11 @@ Home Page Styles
 .doctor-page {
   padding: 40px 20px;
   background-color: #F1A94E; /* Rajah */
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  );
 }
 
 .doctor-page h2 {
@@ -257,8 +273,13 @@ Home Page Styles
 /* New Appointment Form Styles */
 .new-appt-form {
   background-color: #FFCB77; /* Peach Yellow */
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  );
   padding: 30px 25px;
-  border-radius: 10px;
+  border-radius: 8px;
   max-width: 500px;
   width: 100%;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -308,6 +329,11 @@ Home Page Styles
 .appointments {
   padding: 40px 20px;
   background-color: #f8f8f8;
+  background: linear-gradient(
+    to bottom right,
+    #fcce5ad3,
+    #ffa135e0
+  );
   text-align: center;
 }
 
@@ -346,19 +372,21 @@ Home Page Styles
 
 /* Auth Page Styles */
 .auth-form {
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 30px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .auth-input input {
-  background-color: #f0f0f0;
+  background-color: #ffffff;
+  margin: auto;
 }
 
 .auth-button {
   background-color: #1D98D0;
   color: white;
+  margin: auto;
 }
 
 .auth-button:hover {
