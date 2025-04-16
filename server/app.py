@@ -107,6 +107,29 @@ class Appointments(Resource):
         except Exception as e:
             print("Unexpected error:", e)
             return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
+    def get(self):
+        parent_id = session.get('parent_id')
+        if not parent_id:
+            return make_response({"error": "Unauthorized"}, 401)
+
+        parent = Parent.query.get(parent_id)
+        if not parent:
+            return make_response({"error": "Parent not found"}, 404)
+
+        # Collect appointments from the parent's children
+        appointments = []
+        for child in parent.children:
+            appointments.extend(child.appointments)
+
+        # Include doctor_name and child_name in each appointment
+        appt_dicts = []
+        for appt in appointments:
+            data = appt.to_dict()
+            data["doctor_name"] = appt.doctor.name
+            data["child_name"] = appt.child.name
+            appt_dicts.append(data)
+
+        return make_response(appt_dicts, 200)
 
 
 api.add_resource(Appointments, '/appointments')
@@ -127,6 +150,7 @@ class Reviews(Resource):
             return make_response({"errors": [str(e)]}, 400)
 
 
+
 class ParentRegistration(Resource):
     def post(self):
         try:
@@ -143,10 +167,11 @@ class ParentRegistration(Resource):
                 print("Missing required fields")
                 return make_response({"error": "Missing required fields"}, 400)
 
-            # Create new parent
+            # Create new parent and use the password setter (let it hash!)
             parent = Parent(username=username, email=email)
-            parent.password_hash = bcrypt.generate_password_hash(password).decode('utf-8')
+            parent.password_hash = password  # This triggers the setter which hashes the password
 
+            # Add associated children
             for child in children_params:
                 name = child.get('name')
                 age = child.get('age')
@@ -162,6 +187,7 @@ class ParentRegistration(Resource):
             db.session.add(parent)
             db.session.commit()
 
+            # Log the user in by setting session
             session['parent_id'] = parent.id
             print("Parent created successfully:", parent.to_dict())
 
@@ -169,39 +195,47 @@ class ParentRegistration(Resource):
 
         except Exception as e:
             import traceback
-            traceback.print_exc()  # Print full stack trace
+            traceback.print_exc()
             return make_response({"error": f"Exception occurred: {str(e)}"}, 400)
+
 
 
 
 
 class CurrentParent(Resource):
     def get(self):
-        print("Session data on /me:", dict(session))
         parent_id = session.get('parent_id')
         if not parent_id:
-            return make_response({"error": "Unauthorized"}, 401)
-
-        parent = db.session.get(Parent, parent_id)
+            return make_response({'error': 'Unauthorized'}, 401)
+        parent = Parent.query.get(parent_id)
         if not parent:
-            return make_response({"error": "Parent not found"}, 404)
-
+            return make_response({'error': 'Parent not found'}, 404)
         return make_response(parent.to_dict(), 200)
     
+
 class Login(Resource):
     def post(self):
         params = request.get_json()
-        username = params.get('username')
-        password = params.get('password')
-
-        parent = db.session.execute(db.select(Parent).filter_by(username=username)).scalar_one_or_none()
-
-        if parent and bcrypt.check_password_hash(parent.password_hash, password):
-            session['parent_id'] = parent.id
+        parent = Parent.query.filter_by(username=params.get('username')).first()
+        if not parent:
+            return make_response({'error': 'parent not found'}, 404)
+        if parent.authenticate(params.get('password')):
+            session['parent_id'] = parent.id  # Sets the session
             return make_response(parent.to_dict(), 200)
-        print("Session after login:", dict(session))  # or after registration
+        else:
+            return make_response({"error": "Invalid username or password"}, 401)
 
-        return make_response({"error": "Invalid username or password"}, 401)
+        # print("Session after login:", dict(session))  # or after registration
+
+
+
+        # password = params.get('password')
+
+        # parent = db.session.execute(db.select(Parent).filter_by(username=username)).scalar_one_or_none()
+
+        # if parent and bcrypt.check_password_hash(parent.password_hash, password):
+        #     session['parent_id'] = parent.id
+
 
 class Logout(Resource):
     def delete(self):

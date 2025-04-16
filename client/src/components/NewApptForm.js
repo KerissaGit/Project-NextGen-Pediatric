@@ -30,12 +30,16 @@ function NewApptForm({ parent, doctors, setAppointments }) {
       body: JSON.stringify(formData)
     })
       .then(res => {
-        if (!res.ok) throw new Error("Failed to create appointment.");
+        if (!res.ok) {
+          throw new Error("Failed to create appointment.");
+        }
         return res.json();
       })
       .then(newAppt => {
         alert("Appointment created!");
-        setAppointments(prev => [...prev, newAppt]);
+        // Assuming newAppt contains doctor_name, child_name, etc.
+        setAppointments(prev => Array.isArray(prev) ? [...prev, newAppt] : [newAppt]);
+        // Reset form data after successful creation
         setFormData({
           child_id: "",
           doctor_id: "",

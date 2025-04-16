@@ -76,9 +76,6 @@ function Auth({ setParent }) {
       password: values.password,
     };
 
-
-
-
     console.log('Submitting form:', payload);
 
     fetch(endpoint, {
@@ -109,7 +106,7 @@ function Auth({ setParent }) {
       <Button variant="text" onClick={toggleFormMode} sx={{ mb: 2 }}>
         {signup ? 'Already have an account? Login' : 'Need an account? Register'}
       </Button>
-{/* dynamically rendering inputs */}
+      {/* dynamically rendering inputs */}
       <Formik
         enableReinitialize
         initialValues={signup ? initialSignupValues : initialLoginValues}

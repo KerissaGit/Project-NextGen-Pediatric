@@ -1,3 +1,4 @@
+from flask_bcrypt import check_password_hash 
 from sqlalchemy_serializer import SerializerMixin
 from sqlalchemy.ext.associationproxy import association_proxy
 from sqlalchemy.orm import validates
@@ -53,6 +54,7 @@ class Child(db.Model, SerializerMixin):
 
 
 
+
 class Parent(db.Model, SerializerMixin):
     __tablename__ = 'parents'
 
@@ -60,6 +62,7 @@ class Parent(db.Model, SerializerMixin):
     username = db.Column(db.String, nullable=False)
     _password_hash = db.Column(db.String, nullable=False)
     email = db.Column(db.String)
+    appointments = db.Column(db.String, )
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -80,6 +83,10 @@ class Parent(db.Model, SerializerMixin):
         if value and '@' not in value:
             raise ValueError('Invalid email address.')
         return value
+
+    # Password checking on login
+    def authenticate(self, password):
+        return check_password_hash(self._password_hash, password)
 
     serialize_rules = ('-appointments', '-_password_hash', '-children.parent')
 
