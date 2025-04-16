@@ -71,6 +71,7 @@ class ChildById(Resource):
 class Doctors(Resource):
     def get(self):
         doctors = db.session.execute(db.select(Doctor)).scalars().all()
+        print(doctor_data)
         return make_response([doctor.to_dict() for doctor in doctors], 200)
 
 

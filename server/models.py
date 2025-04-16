@@ -20,6 +20,7 @@ class Doctor(db.Model, SerializerMixin):
     children = association_proxy('appointments', 'child')
 
     serialize_rules = ('-appointments', '-children', '-reviews.doctor')
+    # serialize_rules = ('-appointments', '-children') #Testing
 
 
 class Child(db.Model, SerializerMixin):
