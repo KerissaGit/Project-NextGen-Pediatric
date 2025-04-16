@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Typography, Button, Box, CircularProgress } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  Box,
+  CircularProgress,
+  TextField,
+} from '@mui/material';
 import Auth from './Auth';
 import NewApptForm from './NewApptForm';
 
@@ -8,9 +15,10 @@ function PatientPortal() {
   const [loading, setLoading] = useState(true);
   const [appointments, setAppointments] = useState([]);
   const [doctors, setDoctors] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [editForm, setEditForm] = useState({ start_time: '', end_time: '' });
 
   useEffect(() => {
-    // Fetch logged-in user information
     fetch('/me', {
       method: 'GET',
       credentials: 'include',
@@ -25,15 +33,12 @@ function PatientPortal() {
   }, []);
 
   useEffect(() => {
-    // Fetch doctors and appointments of the logged-in parent
     if (parent) {
-      // Fetch doctors
       fetch('/doctors')
         .then(res => res.json())
         .then(setDoctors);
 
-      // Fetch appointments of the logged-in parent
-      fetch('/appointments')  
+      fetch('/appointments')
         .then(res => res.json())
         .then(setAppointments);
     }
@@ -44,10 +49,46 @@ function PatientPortal() {
       method: 'DELETE',
       credentials: 'include',
     }).then(() => {
-      setParent(null); // Clear the state of Parent
-      setAppointments([]); // Clear the state of Appoitnments 
-
+      setParent(null);
+      setAppointments([]);
     });
+  };
+
+  const handleDelete = (id) => {
+    fetch(`/appointments/${id}`, {
+      method: 'DELETE',
+    }).then(res => {
+      if (res.ok) {
+        setAppointments(prev => prev.filter(appt => appt.id !== id));
+      }
+    });
+  };
+
+  const startEditing = (appt) => {
+    setEditingId(appt.id);
+    setEditForm({
+      start_time: appt.start_time.slice(0, 16),
+      end_time: appt.end_time.slice(0, 16),
+    });
+  };
+
+  const handleEditChange = (e) => {
+    setEditForm({ ...editForm, [e.target.name]: e.target.value });
+  };
+
+  const handleEditSubmit = (id) => {
+    fetch(`/appointments/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(editForm),
+    })
+      .then(res => res.json())
+      .then(updated => {
+        setAppointments(prev =>
+          prev.map(appt => (appt.id === id ? { ...appt, ...updated } : appt))
+        );
+        setEditingId(null);
+      });
   };
 
   if (loading) {
@@ -69,23 +110,58 @@ function PatientPortal() {
             Manage appointments:
           </Typography>
 
-          {/* New Appointment Form */}
           <NewApptForm
             parent={parent}
             doctors={doctors}
             setAppointments={setAppointments}
           />
 
-          {/* Render Current Appointments */}
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6">Your Appointments:</Typography>
             {appointments.length > 0 ? (
               appointments.map(appt => (
                 <Box key={appt.id} sx={{ border: '1px solid #ccc', p: 2, my: 1 }}>
-                  <p><strong>Doctor:</strong> {appt.doctor_name}</p>
-                  <p><strong>Child:</strong> {appt.child_name}</p>
-                  <p><strong>Start:</strong> {appt.start_time}</p>
-                  <p><strong>End:</strong> {appt.end_time}</p>
+                  {editingId === appt.id ? (
+                    <Box>
+                      {/* Handle the PATCH for appointments */}
+                      <TextField
+                        label="Start Time"
+                        type="datetime-local"
+                        name="start_time"
+                        value={editForm.start_time}
+                        onChange={handleEditChange}
+                        sx={{ mr: 2 }}
+                      />
+                      <TextField
+                        label="End Time"
+                        type="datetime-local"
+                        name="end_time"
+                        value={editForm.end_time}
+                        onChange={handleEditChange}
+                      />
+                      <Button onClick={() => handleEditSubmit(appt.id)} sx={{ ml: 2 }} variant="contained">
+                        Save
+                      </Button>
+                      <Button onClick={() => setEditingId(null)} sx={{ ml: 1 }} variant="outlined" color="secondary">
+                        Cancel
+                      </Button>
+                    </Box>
+                  ) : (
+                    <>
+                      <p><strong>Doctor:</strong> {appt.doctor_name}</p>
+                      <p><strong>Child:</strong> {appt.child_name}</p>
+                      <p><strong>Start:</strong> {appt.start_time}</p>
+                      <p><strong>End:</strong> {appt.end_time}</p>
+
+                      <Button onClick={() => startEditing(appt)} size="small" sx={{ mr: 1 }} variant="outlined">
+                        Edit
+                      </Button>
+                      {/* Handle the DELETE for appointments */}
+                      <Button onClick={() => handleDelete(appt.id)} size="small" variant="outlined" color="error">
+                        Delete
+                      </Button>
+                    </>
+                  )}
                 </Box>
               ))
             ) : (
@@ -93,7 +169,6 @@ function PatientPortal() {
             )}
           </Box>
 
-          {/* Logout Button */}
           <Button variant="outlined" color="secondary" onClick={handleLogout} sx={{ mt: 4 }}>
             Logout
           </Button>
