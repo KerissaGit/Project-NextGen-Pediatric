@@ -77,26 +77,39 @@ class Doctors(Resource):
 class Appointments(Resource):
     def post(self):
         try:
-            params = request.json
-            start_time = datetime.strptime(params['start_time'], "%Y-%m-%d %H:%M")
-            end_time = datetime.strptime(params['end_time'], "%Y-%m-%d %H:%M")
+            params = request.get_json()
+            print("🚨 Incoming JSON payload:", params)
 
+            # Parse datetime for the appoitnments
+            start_time = datetime.strptime(params['start_time'], "%Y-%m-%dT%H:%M")
+            end_time = datetime.strptime(params['end_time'], "%Y-%m-%dT%H:%M")
+
+            # Convert IDs to int just in case
             appointment = Appointment(
-                child_id=params['child_id'],
-                doctor_id=params['doctor_id'],
+                child_id=int(params['child_id']),
+                doctor_id=int(params['doctor_id']),
                 start_time=start_time,
                 end_time=end_time
             )
-            appointment.validate_time_order()  # Assuming this raises errors if invalid
+            appointment.validate_time_order()
+
             db.session.add(appointment)
             db.session.commit()
 
             return make_response(appointment.to_dict(), 201)
+
+        except KeyError as e:
+            print("Missing field:", e)
+            return make_response({"errors": [f"Missing field: {str(e)}"]}, 400)
         except ValueError as e:
-            return make_response({"errors": [str(e)]}, 400)
+            print("Value error:", e)
+            return make_response({"errors": [f"Invalid value: {str(e)}"]}, 400)
         except Exception as e:
+            print("Unexpected error:", e)
             return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
 
+
+api.add_resource(Appointments, '/appointments')
 
 class Reviews(Resource):
     def post(self):
@@ -202,7 +215,6 @@ api.add_resource(Parents, '/parents')
 api.add_resource(Children, '/children')
 api.add_resource(ChildById, '/children/<int:id>')
 api.add_resource(Doctors, '/doctors')
-api.add_resource(Appointments, '/appointments')
 api.add_resource(Reviews, '/reviews')
 api.add_resource(ParentRegistration, '/parent')
 api.add_resource(CurrentParent, '/me')
