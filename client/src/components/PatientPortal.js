@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography, Button, Box, CircularProgress } from '@mui/material';
 import Auth from './Auth';
-// import Appointments from './Appointments';
 import NewApptForm from './NewApptForm';
 
 function PatientPortal() {
@@ -11,6 +10,7 @@ function PatientPortal() {
   const [doctors, setDoctors] = useState([]);
 
   useEffect(() => {
+    // Fetch logged-in user information
     fetch('/me', {
       method: 'GET',
       credentials: 'include',
@@ -25,13 +25,15 @@ function PatientPortal() {
   }, []);
 
   useEffect(() => {
-    // Only fetch doctors if the parent is logged in
+    // Fetch doctors and appointments of the logged-in parent
     if (parent) {
+      // Fetch doctors
       fetch('/doctors')
         .then(res => res.json())
         .then(setDoctors);
 
-      fetch('/appointments')
+      // Fetch appointments of the logged-in parent
+      fetch('/appointments')  
         .then(res => res.json())
         .then(setAppointments);
     }
@@ -42,8 +44,9 @@ function PatientPortal() {
       method: 'DELETE',
       credentials: 'include',
     }).then(() => {
-      setParent(null);
-      window.location.reload();
+      setParent(null); // Clear the state of Parent
+      setAppointments([]); // Clear the state of Appoitnments 
+
     });
   };
 
@@ -66,20 +69,21 @@ function PatientPortal() {
             Manage appointments:
           </Typography>
 
-          {/* Import the NewAppForm */}
+          {/* New Appointment Form */}
           <NewApptForm
-            parent={parent} 
+            parent={parent}
             doctors={doctors}
             setAppointments={setAppointments}
           />
 
-          {/* Render current appointments */}
+          {/* Render Current Appointments */}
           <Box sx={{ mt: 4 }}>
             <Typography variant="h6">Your Appointments:</Typography>
             {appointments.length > 0 ? (
               appointments.map(appt => (
                 <Box key={appt.id} sx={{ border: '1px solid #ccc', p: 2, my: 1 }}>
                   <p><strong>Doctor:</strong> {appt.doctor_name}</p>
+                  <p><strong>Child:</strong> {appt.child_name}</p>
                   <p><strong>Start:</strong> {appt.start_time}</p>
                   <p><strong>End:</strong> {appt.end_time}</p>
                 </Box>
@@ -89,6 +93,7 @@ function PatientPortal() {
             )}
           </Box>
 
+          {/* Logout Button */}
           <Button variant="outlined" color="secondary" onClick={handleLogout} sx={{ mt: 4 }}>
             Logout
           </Button>
@@ -99,6 +104,5 @@ function PatientPortal() {
     </Container>
   );
 }
-
 
 export default PatientPortal;
