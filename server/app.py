@@ -74,17 +74,21 @@ class Doctors(Resource):
         return make_response([doctor.to_dict() for doctor in doctors], 200)
 
 
+from flask import request, make_response, session
+from flask_restful import Resource
+from models import Appointment, Parent
+from datetime import datetime
+from app import db
+
 class Appointments(Resource):
     def post(self):
         try:
             params = request.get_json()
             print("🚨 Incoming JSON payload:", params)
 
-            # Parse datetime for the appoitnments
             start_time = datetime.strptime(params['start_time'], "%Y-%m-%dT%H:%M")
             end_time = datetime.strptime(params['end_time'], "%Y-%m-%dT%H:%M")
 
-            # Convert IDs to int just in case
             appointment = Appointment(
                 child_id=int(params['child_id']),
                 doctor_id=int(params['doctor_id']),
@@ -107,6 +111,7 @@ class Appointments(Resource):
         except Exception as e:
             print("Unexpected error:", e)
             return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
+
     def get(self):
         parent_id = session.get('parent_id')
         if not parent_id:
@@ -116,12 +121,10 @@ class Appointments(Resource):
         if not parent:
             return make_response({"error": "Parent not found"}, 404)
 
-        # Collect appointments from the parent's children
         appointments = []
         for child in parent.children:
             appointments.extend(child.appointments)
 
-        # Include doctor_name and child_name in each appointment
         appt_dicts = []
         for appt in appointments:
             data = appt.to_dict()
@@ -131,8 +134,50 @@ class Appointments(Resource):
 
         return make_response(appt_dicts, 200)
 
+    def patch(self, id):
+        try:
+            appointment = Appointment.query.get(id)
+            if not appointment:
+                return make_response({"error": "Appointment not found"}, 404)
 
-api.add_resource(Appointments, '/appointments')
+            params = request.get_json()
+
+            if 'start_time' in params:
+                appointment.start_time = datetime.strptime(params['start_time'], "%Y-%m-%dT%H:%M")
+            if 'end_time' in params:
+                appointment.end_time = datetime.strptime(params['end_time'], "%Y-%m-%dT%H:%M")
+            if 'child_id' in params:
+                appointment.child_id = int(params['child_id'])
+            if 'doctor_id' in params:
+                appointment.doctor_id = int(params['doctor_id'])
+
+            appointment.validate_time_order()
+
+            db.session.commit()
+
+            return make_response(appointment.to_dict(), 200)
+
+        except ValueError as e:
+            return make_response({"errors": [f"Invalid value: {str(e)}"]}, 400)
+        except Exception as e:
+            return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
+
+    def delete(self, id):
+        try:
+            appointment = Appointment.query.get(id)
+            if not appointment:
+                return make_response({"error": "Appointment not found"}, 404)
+
+            db.session.delete(appointment)
+            db.session.commit()
+
+            return make_response({}, 204)
+
+        except Exception as e:
+            return make_response({"errors": [f"Unexpected error: {str(e)}"]}, 400)
+
+
+
 
 class Reviews(Resource):
     def post(self):
@@ -167,7 +212,7 @@ class ParentRegistration(Resource):
                 print("Missing required fields")
                 return make_response({"error": "Missing required fields"}, 400)
 
-            # Create new parent and use the password setter (let it hash!)
+            # Create new parent and use the password setter 
             parent = Parent(username=username, email=email)
             parent.password_hash = password  # This triggers the setter which hashes the password
 
@@ -225,18 +270,7 @@ class Login(Resource):
         else:
             return make_response({"error": "Invalid username or password"}, 401)
 
-        # print("Session after login:", dict(session))  # or after registration
-
-
-
-        # password = params.get('password')
-
-        # parent = db.session.execute(db.select(Parent).filter_by(username=username)).scalar_one_or_none()
-
-        # if parent and bcrypt.check_password_hash(parent.password_hash, password):
-        #     session['parent_id'] = parent.id
-
-
+        
 class Logout(Resource):
     def delete(self):
         session.pop('parent_id', None)
@@ -254,6 +288,7 @@ api.add_resource(ParentRegistration, '/parent')
 api.add_resource(CurrentParent, '/me')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
+api.add_resource(Appointments, '/appointments', '/appointments/<int:id>')
 
 
 if __name__ == '__main__':

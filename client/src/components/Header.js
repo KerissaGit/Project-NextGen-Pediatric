@@ -1,22 +1,44 @@
 import React from "react";
-// import { NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Header() {
-    return(
+    return (
         <header className='header'>
-            <h1>
-                NextGen Pediatrics
-            </h1>
-            <div>
-                {/* Navlinks go here */}
-                <h2>Home Page</h2>
-                {/* Navlinks go here */}
-                <h2>Patient Portal</h2>
-                {/* Navlinks go here */}
-                <h2>Doctors</h2>
-            </div>
+            <h1>NextGen Pediatrics</h1>
+            <nav className="header nav">
+                <ul className="header nav">
+                    <li>
+                        <NavLink 
+                            to="/" 
+                        >
+                            Home
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink 
+                            to="/portal" 
+                        >
+                            Patient Portal
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink 
+                            to="/doctors" 
+                        >
+                            Doctors
+                        </NavLink>
+                    </li>
+                    <li>
+                        <NavLink 
+                            to="/appointments" 
+                        >
+                            Appointments
+                        </NavLink>
+                    </li>
+                </ul>
+            </nav>
         </header>
-    )
+    );
 }
 
 export default Header;
