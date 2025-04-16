@@ -8,24 +8,27 @@ function DoctorContainer(){
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    // useEffect(() => {
+    //   fetch("http://localhost:5555/doctors")
+    //     .then((resp) => resp.json())
+    //     .then((data) => {setDoctors(data); setLoading(false);})
+    //     .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
+    // }, [setDoctors])
+
+    const fetchDoctors = () => {
       fetch("http://localhost:5555/doctors")
         .then((resp) => resp.json())
-        .then((data) => {setDoctors(data); setLoading(false);})
-        .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
-    }, [setDoctors])
-
-    // const renderDoctors = doctors.map(({id, name, specialty, education, year_experience, reviews, reasonVisit}) => 
-    //     (<DoctorCards
-    //         key={id}
-    //         name={name}
-    //         specialty={specialty}
-    //         education={education}
-    //         year_experience={year_experience}
-    //         reviews={reviews}
-    //         // reasonVisit={reasonVisit}
-    //     />))
-
+        .then((data) => {
+          setDoctors(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching in DoctorContainer.", error);
+          setLoading(false);
+        });
+    };
+  
+    useEffect(fetchDoctors, []);
 
 return (
     <div>
@@ -49,7 +52,7 @@ return (
         <p>No doctors currently available. 🙁</p>
       )}
       <br />
-      <ReviewForm />
+      <ReviewForm onReviewSubmit={fetchDoctors}/>
     </div>
   );
 }
