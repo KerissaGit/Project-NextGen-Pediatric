@@ -52,17 +52,22 @@ function Appointments() {
     fetch("/parents")
       .then(resp => resp.json())
       .then(setParents);
+      
+    fetch("/appointments")
+      .then(resp => resp.json())
+      .then(setAppointments);
 
     fetch("/doctors")
       .then(resp => resp.json())
       .then(setDoctors);
   }, []);
+      
 
   return (
     <div className="home-page">
       <DoctorContainer />
       <PatientPortal />
-      <Outlet context={{ parents, doctors, setAppointments }} />
+      <Outlet context={{ parents, doctors, appointments }} />
     </div>
   );
 }

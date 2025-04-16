@@ -15,13 +15,13 @@ function NewApptForm({ parent, doctors, setAppointments }) {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+  
     const { child_id, doctor_id, start_time, end_time } = formData;
     if (!child_id || !doctor_id || !start_time || !end_time) {
       alert("Please fill out all fields.");
       return;
     }
-
+  
     fetch("http://localhost:5555/appointments", {
       method: "POST",
       headers: {
@@ -30,12 +30,14 @@ function NewApptForm({ parent, doctors, setAppointments }) {
       body: JSON.stringify(formData)
     })
       .then(res => {
-        if (!res.ok) throw new Error("Failed to create appointment.");
+        if (!res.ok) {
+          throw new Error("Failed to create appointment.");
+        }
         return res.json();
       })
       .then(newAppt => {
         alert("Appointment created!");
-        setAppointments(prev => [...prev, newAppt]);
+        setAppointments(prev => Array.isArray(prev) ? [...prev, newAppt] : [newAppt]);
         setFormData({
           child_id: "",
           doctor_id: "",
@@ -45,7 +47,7 @@ function NewApptForm({ parent, doctors, setAppointments }) {
       })
       .catch(err => console.error("Error:", err));
   }
-
+  
   return (
     <form onSubmit={handleSubmit}>
       <h3>Create a New Appointment</h3>
