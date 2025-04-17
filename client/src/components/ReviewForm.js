@@ -9,12 +9,24 @@ function ReviewForm({ onReviewSubmit }) {
         comment: "",
     });
 
+    // useEffect(() => {
+    //     fetch("http://localhost:5555/doctors")
+    //     .then((resp) => resp.json())
+    //     .then(setDoctors)
+    //     .catch((error) => console.error("Error loading Doctors review form.", error));
+    // }, []);
+
+    //Testing 
     useEffect(() => {
         fetch("http://localhost:5555/doctors")
-        .then((resp) => resp.json())
-        .then(setDoctors)
-        .catch((error) => console.error("Error loading Doctors review form.", error));
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log("Fetched doctors:", data);
+                setDoctors(data);
+            })
+            .catch((error) => console.error("Error loading Doctors review form.", error));
     }, []);
+    
 
     function handleChange(e) {
         const {name, value} = e.target;
