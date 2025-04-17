@@ -8,23 +8,30 @@ function DoctorContainer(){
     const [doctors, setDoctors] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    //This code works without refreshing doctor reviews*
+    // useEffect(() => {
+    //   fetch("http://localhost:5555/doctors")
+    //     .then((resp) => resp.json())
+    //     .then((data) => {setDoctors(data); setLoading(false);})
+    //     .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
+    // }, [setDoctors])
+
+
+    //This code is to work through the doctor reviews and add them as it is submitted actively.
+    const fetchDoctors = () => {
       fetch("http://localhost:5555/doctors")
         .then((resp) => resp.json())
-        .then((data) => {setDoctors(data); setLoading(false);})
-        .catch(error => {console.error("Error fetching in DoctorContainer.", error); setLoading(false);})
-    }, [setDoctors])
-
-    // const renderDoctors = doctors.map(({id, name, specialty, education, year_experience, reviews, reasonVisit}) => 
-    //     (<DoctorCards
-    //         key={id}
-    //         name={name}
-    //         specialty={specialty}
-    //         education={education}
-    //         year_experience={year_experience}
-    //         reviews={reviews}
-    //         // reasonVisit={reasonVisit}
-    //     />))
+        .then((data) => {
+          setDoctors(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching in DoctorContainer.", error);
+          setLoading(false);
+        });
+    };
+  
+    useEffect(fetchDoctors, []);
 
 
 return (
@@ -49,7 +56,7 @@ return (
         <p>No doctors currently available. 🙁</p>
       )}
       <br />
-      <ReviewForm />
+      <ReviewForm  onReviewSubmit={fetchDoctors} />
     </div>
   );
 }

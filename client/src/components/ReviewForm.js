@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function ReviewForm() {
+function ReviewForm({ onReviewSubmit }) {
     const [doctors, setDoctors]= useState([]);
     
     const [formData, setFormData] = useState({
@@ -9,12 +9,24 @@ function ReviewForm() {
         comment: "",
     });
 
+    // useEffect(() => {
+    //     fetch("http://localhost:5555/doctors")
+    //     .then((resp) => resp.json())
+    //     .then(setDoctors)
+    //     .catch((error) => console.error("Error loading Doctors review form.", error));
+    // }, []);
+
+    //Testing 
     useEffect(() => {
         fetch("http://localhost:5555/doctors")
-        .then((resp) => resp.json())
-        .then(setDoctors)
-        .catch((error) => console.error("Error loading Doctors review form.", error));
+            .then((resp) => resp.json())
+            .then((data) => {
+                console.log("Fetched doctors:", data);
+                setDoctors(data);
+            })
+            .catch((error) => console.error("Error loading Doctors review form.", error));
     }, []);
+    
 
     function handleChange(e) {
         const {name, value} = e.target;
@@ -35,6 +47,7 @@ function ReviewForm() {
                 rating: "",
                 comment: ""
             });
+            if (onReviewSubmit) onReviewSubmit();
         })
         .catch((error) => console.error("Error submitting review.", error));
     }
@@ -54,6 +67,17 @@ function ReviewForm() {
                 <br />
                 <label>Rate your Doctor (1-5):</label>
                 <input type="number" name="rating" min="1" max="5" value={formData.rating} onChange={handleChange} required />
+                <br />
+                <label>Leave a Comment:</label>
+                <br />
+                <textarea
+                    name="comment"
+                    value={formData.comment}
+                    onChange={handleChange}
+                    rows={4}
+                    placeholder="Write your review here."
+                    required
+                />
                 <br />
                 <button type="submit">Submit Review</button>
             </form>
