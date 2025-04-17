@@ -84,7 +84,6 @@ class Appointments(Resource):
     def post(self):
         try:
             params = request.get_json()
-            print("🚨 Incoming JSON payload:", params)
 
             start_time = datetime.strptime(params['start_time'], "%Y-%m-%dT%H:%M")
             end_time = datetime.strptime(params['end_time'], "%Y-%m-%dT%H:%M")
@@ -190,6 +189,10 @@ class Reviews(Resource):
             )
             db.session.add(review)
             db.session.commit()
+
+            # new_review = Review(doctor=doctor, rating=rating)
+            # review.doctor.append(new_review)
+
             return make_response(review.to_dict(), 201)
         except Exception as e:
             return make_response({"errors": [str(e)]}, 400)
