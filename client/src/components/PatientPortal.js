@@ -76,6 +76,7 @@ function PatientPortal() {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
+  {/* Handle the PATCH for appointments */}
   const handleEditSubmit = (id) => {
     fetch(`/appointments/${id}`, {
       method: 'PATCH',
@@ -121,9 +122,9 @@ function PatientPortal() {
             {appointments.length > 0 ? (
               appointments.map(appt => (
                 <Box key={appt.id} sx={{ border: '1px solid #ccc', p: 2, my: 1 }}>
+                  {/* edits to PATCH for appointments */}
                   {editingId === appt.id ? (
                     <Box>
-                      {/* Handle the PATCH for appointments */}
                       <TextField
                         label="Start Time"
                         type="datetime-local"
