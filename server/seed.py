@@ -94,7 +94,7 @@ def create_appointments(doctors, children):
         appointment = Appointment(
             child_id=randint(1, len(children)),
             doctor_id=randint(1, len(doctors)),
-            date=start_time.date(),
+            # date=start_time.date(),
             start_time=start_time,
             end_time=end_time
         )
@@ -113,13 +113,18 @@ def create_reviews(doctors):
             )
             reviews.append(review)
     return reviews
-
+    
 if __name__ == '__main__':
     fake = Faker()
     with app.app_context():
         print("Starting seed...")
 
-        # Create doctors, children, and parents
+        Review.query.delete()
+        Appointment.query.delete()
+        Child.query.delete()
+        Parent.query.delete()
+        Doctor.query.delete()
+
         doctors = create_doctors()
         db.session.add_all(doctors)
         db.session.commit() 
