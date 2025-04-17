@@ -16,8 +16,8 @@ class Doctor(db.Model, SerializerMixin):
     education = db.Column(db.String)
     years_experience = db.Column(db.Integer)
 
-    appointments = db.relationship('Appointment', back_populates='doctor')
-    reviews = db.relationship('Review', back_populates='doctor')
+    appointments = db.relationship('Appointment', back_populates='doctor', cascade='all, delete-orphan')
+    reviews = db.relationship('Review', back_populates='doctor', cascade='all, delete-orphan')
     children = association_proxy('appointments', 'child')
 
     serialize_rules = ('-appointments', '-children', '-reviews.doctor')
@@ -32,7 +32,7 @@ class Child(db.Model, SerializerMixin):
     parent_id = db.Column(db.Integer, db.ForeignKey('parents.id'), nullable=False)
 
     parent = db.relationship('Parent', back_populates='children')
-    appointments = db.relationship('Appointment', back_populates='child')
+    appointments = db.relationship('Appointment', back_populates='child', cascade='all, delete-orphan')
     doctors = association_proxy('appointments', 'doctor')
 
     created_at = db.Column(db.DateTime, server_default=db.func.now())
@@ -67,7 +67,7 @@ class Parent(db.Model, SerializerMixin):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
 
-    children = db.relationship('Child', back_populates='parent')
+    children = db.relationship('Child', back_populates='parent', cascade='all, delete-orphan')
     appointments = association_proxy('children', 'appointments')
 
     @property

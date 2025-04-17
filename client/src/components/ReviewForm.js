@@ -38,11 +38,12 @@ function ReviewForm({ onReviewSubmit }) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        const data = {...formData,  doctor_id: parseInt(formData.doctor_id), rating: parseInt(formData.rating), }
         fetch("http://localhost:5555/reviews", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(formData), 
-            doctor_id: parseInt(formData.doctor_id),
+            body: JSON.stringify(data), 
+           
         })
         .then((resp) => resp.json())
         .then(() => {
