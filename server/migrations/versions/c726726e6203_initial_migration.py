@@ -1,8 +1,8 @@
-"""update the appt table
+"""initial migration
 
-Revision ID: 24e0936d0a94
+Revision ID: c726726e6203
 Revises: 
-Create Date: 2025-04-17 09:16:38.005138
+Create Date: 2025-04-17 11:02:23.412238
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '24e0936d0a94'
+revision = 'c726726e6203'
 down_revision = None
 branch_labels = None
 depends_on = None
