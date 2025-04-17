@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-function ReviewForm() {
+function ReviewForm({ onReviewSubmit }) {
     const [doctors, setDoctors]= useState([]);
     
     const [formData, setFormData] = useState({
@@ -35,6 +35,7 @@ function ReviewForm() {
                 rating: "",
                 comment: ""
             });
+            if (onReviewSubmit) onReviewSubmit();
         })
         .catch((error) => console.error("Error submitting review.", error));
     }
@@ -54,6 +55,17 @@ function ReviewForm() {
                 <br />
                 <label>Rate your Doctor (1-5):</label>
                 <input type="number" name="rating" min="1" max="5" value={formData.rating} onChange={handleChange} required />
+                <br />
+                <label>Leave a Comment:</label>
+                <br />
+                <textarea
+                    name="comment"
+                    value={formData.comment}
+                    onChange={handleChange}
+                    rows={4}
+                    placeholder="Write your review here."
+                    required
+                />
                 <br />
                 <button type="submit">Submit Review</button>
             </form>
