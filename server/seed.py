@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-
-# Standard library imports
 from random import randint, choice as rc
 
 # Remote library imports
@@ -150,5 +147,3 @@ if __name__ == '__main__':
     
 
 # reason_visit= ("Sick", "Broken Bone", "Yearly Check-up", "Physical")
-
-
