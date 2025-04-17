@@ -1,8 +1,8 @@
-"""Removed child_name and doctor_name from appointments
+"""update the appt table
 
-Revision ID: 961c9de7d17a
+Revision ID: 24e0936d0a94
 Revises: 
-Create Date: 2025-04-16 09:15:29.433810
+Create Date: 2025-04-17 09:16:38.005138
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '961c9de7d17a'
+revision = '24e0936d0a94'
 down_revision = None
 branch_labels = None
 depends_on = None

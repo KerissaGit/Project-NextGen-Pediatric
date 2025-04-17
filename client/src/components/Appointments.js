@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Outlet } from "react-router-dom";
-import DoctorContainer from "./DoctorContainer";
+// import DoctorContainer from "./DoctorContainer";
 import PatientPortal from "./PatientPortal";
 // import { FormikContext } from "formik"
 
@@ -26,7 +26,7 @@ function Appointments() {
 
   return (
     <div className="appointments">
-      <DoctorContainer />
+      {/* <DoctorContainer /> */}
       <PatientPortal />
       <Outlet context={{ parents, doctors, appointments }} />
     </div>

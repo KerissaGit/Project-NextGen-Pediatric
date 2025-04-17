@@ -9,23 +9,26 @@ function ReviewForm({ onReviewSubmit }) {
         comment: "",
     });
 
-    // useEffect(() => {
-    //     fetch("http://localhost:5555/doctors")
-    //     .then((resp) => resp.json())
-    //     .then(setDoctors)
-    //     .catch((error) => console.error("Error loading Doctors review form.", error));
-    // }, []);
+ 
+    const fetchDoctors = () => {
+        fetch("http://localhost:5555/doctors")
+        .then((resp) => resp.json())
+        .then(setDoctors)
+        .catch((error) => console.error("Error loading Doctors review form.", error));
+    };
+    
+    useEffect(fetchDoctors, []);
 
     //Testing 
-    useEffect(() => {
-        fetch("http://localhost:5555/doctors")
-            .then((resp) => resp.json())
-            .then((data) => {
-                console.log("Fetched doctors:", data);
-                setDoctors(data);
-            })
-            .catch((error) => console.error("Error loading Doctors review form.", error));
-    }, []);
+    // useEffect(() => {
+    //     fetch("http://localhost:5555/doctors")
+    //         .then((resp) => resp.json())
+    //         .then((data) => {
+    //             console.log("Fetched doctors:", data);
+    //             setDoctors(data);
+    //         })
+    //         .catch((error) => console.error("Error loading Doctors review form.", error));
+    // }, []);
     
 
     function handleChange(e) {
@@ -38,7 +41,8 @@ function ReviewForm({ onReviewSubmit }) {
         fetch("http://localhost:5555/reviews", {
             method: "POST",
             headers: {"Content-Type": "application/json"},
-            body: JSON.stringify(formData),
+            body: JSON.stringify(formData), 
+            doctor_id: parseInt(formData.doctor_id),
         })
         .then((resp) => resp.json())
         .then(() => {

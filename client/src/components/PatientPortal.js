@@ -76,7 +76,6 @@ function PatientPortal() {
     setEditForm({ ...editForm, [e.target.name]: e.target.value });
   };
 
-  {/* Handle the PATCH for appointments */}
   const handleEditSubmit = (id) => {
     fetch(`/appointments/${id}`, {
       method: 'PATCH',

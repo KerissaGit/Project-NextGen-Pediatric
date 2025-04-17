@@ -98,7 +98,7 @@ function Auth({ setParent }) {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ mt: 4 }} className="auth-form">
+    <Container maxWidth="sm" sx={{ mt: 4 }}>
       <Typography variant="h5" align="center" gutterBottom>
         {signup ? 'Register for an Account' : 'Login to Your Account'}
       </Typography>
@@ -120,7 +120,7 @@ function Auth({ setParent }) {
             noValidate
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}
           >
-            <TextField className="auth-input"
+            <TextField
               name="username"
               label="Username"
               fullWidth
@@ -131,7 +131,7 @@ function Auth({ setParent }) {
             />
 
             {signup && (
-              <TextField className="auth-input"
+              <TextField
                 name="email"
                 label="Email"
                 fullWidth
@@ -142,7 +142,7 @@ function Auth({ setParent }) {
               />
             )}
 
-            <TextField className="auth-input"
+            <TextField
               name="password"
               label="Password"
               type="password"
@@ -155,7 +155,7 @@ function Auth({ setParent }) {
 
             {signup && (
               <>
-                <TextField className="auth-input"
+                <TextField
                   name="passwordConfirmation"
                   label="Confirm Password"
                   type="password"
@@ -171,7 +171,7 @@ function Auth({ setParent }) {
                     <>
                       {values.children.map((child, index) => (
                         <Box key={index} sx={{ border: '1px solid #ccc', p: 2, mb: 1 }}>
-                          <TextField className="auth-input"
+                          <TextField
                             label="Child's Name"
                             name={`children[${index}].name`}
                             fullWidth
@@ -188,7 +188,7 @@ function Auth({ setParent }) {
                             }
                           />
 
-                          <TextField className="auth-input"
+                          <TextField
                             label="Child's Age"
                             type="number"
                             name={`children[${index}].age`}
@@ -230,7 +230,7 @@ function Auth({ setParent }) {
               </>
             )}
 
-            <Button type="submit" variant="contained" color="primary" className="auth-button">
+            <Button type="submit" variant="contained" color="primary">
               Submit
             </Button>
           </Box>
