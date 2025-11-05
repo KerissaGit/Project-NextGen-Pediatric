@@ -246,10 +246,6 @@ class ParentRegistration(Resource):
             traceback.print_exc()
             return make_response({"error": f"Exception occurred: {str(e)}"}, 400)
 
-
-
-
-
 class CurrentParent(Resource):
     def get(self):
         parent_id = session.get('parent_id')
@@ -292,7 +288,6 @@ api.add_resource(CurrentParent, '/me')
 api.add_resource(Login, '/login')
 api.add_resource(Logout, '/logout')
 api.add_resource(Appointments, '/appointments', '/appointments/<int:id>')
-
 
 if __name__ == '__main__':
     app.run(port=5555, debug=True)

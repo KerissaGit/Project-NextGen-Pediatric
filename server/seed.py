@@ -124,6 +124,7 @@ if __name__ == '__main__':
         Child.query.delete()
         Parent.query.delete()
         Doctor.query.delete()
+        # db.session.execute(db.delete(Doctor))
 
         doctors = create_doctors()
         db.session.add_all(doctors)

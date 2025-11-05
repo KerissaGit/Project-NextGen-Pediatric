@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Container, TextField, Button, Typography, Box, } from '@mui/material';
+import { Container, TextField, Button, Typography, Box } from '@mui/material';
 import { Formik, FieldArray } from 'formik';
 import * as yup from 'yup';
 
 function Auth({ setParent }) {
   const [signup, setSignUp] = useState(true);
 
-  // validation schema using yup
+  // validation schemas
   const signupSchema = yup.object().shape({
     username: yup.string().min(5).max(15).required('Username is required'),
     email: yup.string().email('Invalid email').required('Email is required'),
@@ -32,9 +32,7 @@ function Auth({ setParent }) {
     password: yup.string().required('Password is required'),
   });
 
-
-  // Form Initial Values
-
+  // Form initial values
   const initialSignupValues = {
     username: '',
     email: '',
@@ -48,53 +46,55 @@ function Auth({ setParent }) {
     password: '',
   };
 
-
-  // Toggle the form
-  
+  // Toggle form mode
   const toggleFormMode = () => {
     setSignUp(prev => !prev);
   };
 
- 
   // Form submit handler
+  const handleFormSubmit = async (values, { setSubmitting }) => {
+    setSubmitting(true);
 
-  const handleFormSubmit = (values) => {
     const endpoint = signup ? '/parent' : '/login';
 
     const payload = signup
-  ? {
-      username: values.username,
-      email: values.email,
-      password: values.password,
-      children: values.children.map(child => ({
-        name: child.name,
-        age: parseInt(child.age, 10),
-      })),
-    }
-  : {
-      username: values.username,
-      password: values.password,
-    };
-
-    console.log('Submitting form:', payload);
-
-    fetch(endpoint, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(payload),
-    })
-      .then(response => {
-        if (response.ok) {
-          response.json().then(parent => {
-            localStorage.setItem('loggedInParent', JSON.stringify(parent));
-            setParent(parent);
-          });
-        } else {
-          console.error('Login/Register failed');
+      ? {
+          username: values.username,
+          email: values.email,
+          password: values.password,
+          children: values.children.map(child => ({
+            name: child.name,
+            age: parseInt(child.age, 10),
+          })),
         }
-      })
-      .catch(err => console.error('Network error:', err));
+      : {
+          username: values.username,
+          password: values.password,
+        };
+
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Login/Register failed', errorData);
+        alert(errorData.error || 'Submission failed');
+      } else {
+        const parent = await response.json();
+        localStorage.setItem('loggedInParent', JSON.stringify(parent));
+        setParent(parent);
+      }
+    } catch (err) {
+      console.error('Network error:', err);
+      alert('Network error, please try again.');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -106,14 +106,14 @@ function Auth({ setParent }) {
       <Button variant="text" onClick={toggleFormMode} sx={{ mb: 2 }}>
         {signup ? 'Already have an account? Login' : 'Need an account? Register'}
       </Button>
-      {/* dynamically rendering inputs */}
+
       <Formik
         enableReinitialize
         initialValues={signup ? initialSignupValues : initialLoginValues}
         validationSchema={signup ? signupSchema : loginSchema}
         onSubmit={handleFormSubmit}
       >
-        {({ handleSubmit, values, handleChange, errors, touched }) => (
+        {({ handleSubmit, values, handleChange, errors, touched, isSubmitting }) => (
           <Box
             component="form"
             onSubmit={handleSubmit}
@@ -177,10 +177,9 @@ function Auth({ setParent }) {
                             fullWidth
                             value={child.name}
                             onChange={handleChange}
-                            // validation error message under the input if it exists.
                             error={
                               touched.children?.[index]?.name &&
-                              Boolean(errors.children?.[index]?.name)  
+                              Boolean(errors.children?.[index]?.name)
                             }
                             helperText={
                               touched.children?.[index]?.name &&
@@ -195,7 +194,6 @@ function Auth({ setParent }) {
                             fullWidth
                             value={child.age}
                             onChange={handleChange}
-                            // validation error message under the input if it exists.
                             error={
                               touched.children?.[index]?.age &&
                               Boolean(errors.children?.[index]?.age)
@@ -205,7 +203,7 @@ function Auth({ setParent }) {
                               errors.children?.[index]?.age
                             }
                           />
-                          {/* Can remove a child is needed */}
+
                           {values.children.length > 1 && (
                             <Button
                               onClick={() => remove(index)}
@@ -230,8 +228,13 @@ function Auth({ setParent }) {
               </>
             )}
 
-            <Button type="submit" variant="contained" color="primary">
-              Submit
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Submitting...' : 'Submit'}
             </Button>
           </Box>
         )}
